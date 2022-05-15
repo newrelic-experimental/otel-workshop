@@ -27,7 +27,7 @@ kubectl get nodes
 **Clone the repo for the sample application** 
 
 ```bash
-git clone https://github.com/newrelic-forks/microservices-demo.git
+git clone https://github.com/newrelic-experimental/otel-workshop.git
 ```
 
 **Export env variables** 
