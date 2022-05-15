@@ -1,0 +1,41 @@
+---
+extensions:
+  health_check: {}
+  zpages: {}
+  memory_ballast:
+    size_mib: 683
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+processors:
+  batch:
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 1800
+    spike_limit_mib: 500
+exporters:
+  otlp:
+    endpoint: $OTEL_EXPORTER_OTLP_ENDPOINT
+    headers:
+      api-key: $NEW_RELIC_API_KEY
+  otlp/infinite-tracing:
+    endpoint: $OTEL_EXPORTER_OTLP_ENDPOINT_INFINITE_TRACING
+    headers:
+      api-key: $NEW_RELIC_API_KEY
+    compression: gzip
+service:
+  extensions: [health_check, zpages, memory_ballast]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [otlp]
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [otlp/infinite-tracing]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
