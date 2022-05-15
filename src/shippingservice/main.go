@@ -168,7 +168,7 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 	defer log.Info("[GetQuote] completed request")
 
 	// 1. Generate a quote based on the total number of items to be shipped.
-	quote := CreateQuoteFromCount(0, ctx)
+	quote := CreateQuoteFromCount(0)
 	// 2. Generate a response.
 	return &pb.GetQuoteResponse{
 		CostUsd: &pb.Money{
@@ -182,17 +182,11 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 // ShipOrder mocks that the requested items will be shipped.
 // It supplies a tracking ID for notional lookup of shipment delivery status.
 func (s *server) ShipOrder(ctx context.Context, in *pb.ShipOrderRequest) (*pb.ShipOrderResponse, error) {
-	// ctx, parentSpan := tracer.Start(ctx, "shipOrder")
-	// defer parentSpan.End()
 	log.Info("[ShipOrder] received request")
 	defer log.Info("[ShipOrder] completed request")
 	// 1. Create a Tracking ID
 	baseAddress := fmt.Sprintf("%s, %s, %s, %d", in.Address.StreetAddress, in.Address.City, in.Address.State, in.Address.ZipCode)
-	// if(in.Address.ZipCode < 10000 || in.Address.ZipCode > 99999){
-	// 	parentSpan.SetStatus(1, "zipcode is invalid")
-	// }
 	id := CreateTrackingId(baseAddress)
-	// parentSpan.SetAttributes(attribute.String("address", baseAddress), attribute.String("city", in.Address.City), attribute.String("state", in.Address.State))
 	// 2. Generate a response.
 	return &pb.ShipOrderResponse{
 		TrackingId: id,
@@ -205,19 +199,12 @@ func (q Quote) String() string {
 }
 
 // CreateQuoteFromCount takes a number of items and returns a Price struct.
-func CreateQuoteFromCount(count int, ctx context.Context) Quote {
-	ctx, childSpan := tracer.Start(ctx, "CreateQuoteFromCount")
-	defer childSpan.End()
-
-	time.Sleep(time.Second / 10)
+func CreateQuoteFromCount(count int) Quote {
 	return CreateQuoteFromFloat(float64(rand.Intn(100)), ctx)
 }
 
 // CreateQuoteFromFloat takes a price represented as a float and creates a Price struct.
-func CreateQuoteFromFloat(value float64 , ctx context.Context) Quote {
-	ctx, childSpan := tracer.Start(ctx, "CreateQuoteFromFloat")
-	defer childSpan.End()
-	time.Sleep(time.Second / 3 )
+func CreateQuoteFromFloat(value float64) Quote {
 	units, fraction := math.Modf(value)
 	return Quote{
 		uint32(units),
