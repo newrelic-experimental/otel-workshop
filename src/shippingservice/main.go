@@ -182,17 +182,15 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 // ShipOrder mocks that the requested items will be shipped.
 // It supplies a tracking ID for notional lookup of shipment delivery status.
 func (s *server) ShipOrder(ctx context.Context, in *pb.ShipOrderRequest) (*pb.ShipOrderResponse, error) {
-	// ctx, parentSpan := tracer.Start(ctx, "shipOrder")
-	// defer parentSpan.End()
 	log.Info("[ShipOrder] received request")
 	defer log.Info("[ShipOrder] completed request")
 	// 1. Create a Tracking ID
 	baseAddress := fmt.Sprintf("%s, %s, %s, %d", in.Address.StreetAddress, in.Address.City, in.Address.State, in.Address.ZipCode)
-	// if(in.Address.ZipCode < 10000 || in.Address.ZipCode > 99999){
-	// 	parentSpan.SetStatus(1, "zipcode is invalid")
-	// }
+	if(in.Address.ZipCode < 10000 || in.Address.ZipCode > 99999){
+		parentSpan.SetStatus(1, "zipcode is invalid")
+	}
 	id := CreateTrackingId(baseAddress)
-	// parentSpan.SetAttributes(attribute.String("address", baseAddress), attribute.String("city", in.Address.City), attribute.String("state", in.Address.State))
+	parentSpan.SetAttributes(attribute.String("address", baseAddress), attribute.String("city", in.Address.City), attribute.String("state", in.Address.State))
 	// 2. Generate a response.
 	return &pb.ShipOrderResponse{
 		TrackingId: id,
