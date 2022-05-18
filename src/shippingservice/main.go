@@ -30,7 +30,6 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
-	"go.opentelemetry.io/otel/attribute"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 	"go.opentelemetry.io/otel/trace"
@@ -200,7 +199,7 @@ func (q Quote) String() string {
 
 // CreateQuoteFromCount takes a number of items and returns a Price struct.
 func CreateQuoteFromCount(count int) Quote {
-	return CreateQuoteFromFloat(float64(rand.Intn(100)), ctx)
+	return CreateQuoteFromFloat(float64(rand.Intn(100)))
 }
 
 // CreateQuoteFromFloat takes a price represented as a float and creates a Price struct.
