@@ -66,7 +66,7 @@ When you head into New Relic distributed tracing you should see something like t
 - **🙈 Solution**
     
     ```go
-    func CreateQuoteFromFloat(value float64) Quote {
+    func CreateQuoteFromCount(value float64) Quote {
     	...
     	time.Sleep(time.Second / 10)
     	...
@@ -95,8 +95,8 @@ However, let’s say we want to get one level deeper and want to see what caused
 - **🙈 Solution**
     
     ```go
-    func CreateQuoteFromFloat(value float64 , ctx context.Context) Quote {
-    	ctx, childSpan := tracer.Start(ctx, "CreateQuoteFromFloat")
+    func CreateQuoteFromCount(value float64 , ctx context.Context) Quote {
+    	ctx, childSpan := tracer.Start(ctx, "CreateQuoteFromCount")
     	defer childSpan.End()
     	...
     }
@@ -141,6 +141,12 @@ to get the breakdown of all orders processed by state
 ![Screen Shot 2022-05-15 at 5.38.11 PM.png](images/Screen_Shot_2022-05-15_at_5.38.11_PM.png)
 
 - **🙈 Solution**
+    ```go
+    import (
+        ...
+        "go.opentelemetry.io/otel/attribute"
+    }
+    ```
     
     ```go
     func (s *server) ShipOrder(ctx context.Context, in *pb.ShipOrderRequest) (*pb.ShipOrderResponse, error) {
