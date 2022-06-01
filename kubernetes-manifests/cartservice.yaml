@@ -31,7 +31,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: cartservice
+        image: gcr.io/nr-devadv-labs/cartservice
         ports:
         - containerPort: 7070
         env:
@@ -51,11 +51,11 @@ spec:
           value: "http://$(HOST_IP):4317"
         resources:
           requests:
-            cpu: 100m
-            memory: 64Mi
+            cpu: 200m
+            memory: 192Mi
           limits:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 200m
+            memory: 384Mi
         readinessProbe:
           initialDelaySeconds: 15
           exec:

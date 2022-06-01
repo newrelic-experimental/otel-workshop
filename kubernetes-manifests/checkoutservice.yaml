@@ -30,7 +30,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: checkoutservice
+          image: gcr.io/nr-devadv-labs/checkoutservice
           ports:
           - containerPort: 5050
           readinessProbe:

@@ -30,24 +30,6 @@ build:
       buildArgs:
         NEW_RELIC_LICENSE_KEY: '{{.NEW_RELIC_LICENSE_KEY}}'
         NEW_RELIC_HOST: '{{.NEW_RELIC_HOST}}'
-  - image: productcatalogservice
-    context: src/productcatalogservice
-  - image: recommendationservice
-    context: src/recommendationservice
-  - image: checkoutservice
-    context: src/checkoutservice
-  - image: paymentservice
-    context: src/paymentservice
-  - image: currencyservice
-    context: src/currencyservice
-  - image: cartservice
-    context: src/cartservice/src
-    docker:
-      dockerfile: Dockerfile
-  - image: frontend
-    context: src/frontend
-  - image: adservice
-    context: src/adservice
   - image: otel-collector
     context: src/otel-collector
     docker:
@@ -124,7 +106,7 @@ requires:
   - configs: [app]
 build:
   artifacts:
-  - image: loadgenerator
+  - image: gcr.io/nr-devadv-labs/loadgenerator
     context: src/loadgenerator
 deploy:
   kubectl:

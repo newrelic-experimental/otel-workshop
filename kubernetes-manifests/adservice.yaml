@@ -32,7 +32,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adservice
+        image: gcr.io/nr-devadv-labs/adservice
         ports:
         - containerPort: 9555
         env:
@@ -62,18 +62,18 @@ spec:
           value: "http://$(HOST_IP):4317"
         resources:
           requests:
-            cpu: 200m
-            memory: 280Mi
+            cpu: 600m
+            memory: 840Mi
           limits:
-            cpu: 200m
-            memory: 400Mi
+            cpu: 600m
+            memory: 1200Mi
         readinessProbe:
-          initialDelaySeconds: 60
+          initialDelaySeconds: 90
           periodSeconds: 15
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:9555"]
         livenessProbe:
-          initialDelaySeconds: 120
+          initialDelaySeconds: 180
           periodSeconds: 15
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:9555"]
