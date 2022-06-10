@@ -33,7 +33,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: gcr.io/nr-devadv-labs/frontend
+          image: gcr.io/nr-devadv-labs/frontend:e0e021f
           ports:
           - containerPort: 8080
           readinessProbe:

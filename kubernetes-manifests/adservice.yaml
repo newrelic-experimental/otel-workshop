@@ -32,7 +32,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: gcr.io/nr-devadv-labs/adservice
+        image: gcr.io/nr-devadv-labs/adservice:e0e021f
         ports:
         - containerPort: 9555
         env:
