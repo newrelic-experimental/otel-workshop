@@ -106,7 +106,7 @@ requires:
   - configs: [app]
 build:
   artifacts:
-  - image: gcr.io/nr-devadv-labs/loadgenerator
+  - image: loadgenerator
     context: src/loadgenerator
 deploy:
   kubectl:
