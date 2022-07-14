@@ -1,28 +1,5 @@
 ---
 receivers:
-  hostmetrics:
-    collection_interval: 20s
-    scrapers:
-      cpu:
-        metrics:
-          system.cpu.utilization:
-            enabled: true
-      load:
-      memory:
-        metrics:
-          system.memory.utilization:
-            enabled: true
-      disk:
-      filesystem:
-        metrics:
-          system.filesystem.utilization:
-            enabled: true
-      network:
-      paging:
-        metrics:
-          system.paging.utilization:
-            enabled: true
-      processes:
   otlp:
     protocols:
       grpc:
@@ -72,7 +49,7 @@ exporters:
 service:
   pipelines:
     metrics:
-      receivers: [ hostmetrics, otlp ]
+      receivers: [ otlp ]
       processors: [ resourcedetection, k8sattributes, resource, cumulativetodelta, batch ]
       exporters: [ otlp ]
     traces:
