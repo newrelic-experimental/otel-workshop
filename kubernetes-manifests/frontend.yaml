@@ -33,11 +33,11 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: frontend
+          image: gcr.io/nr-devadv-labs/frontend:e0e021f
           ports:
           - containerPort: 8080
           readinessProbe:
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             httpGet:
               path: "/_healthz"
               port: 8080
@@ -45,7 +45,7 @@ spec:
               - name: "Cookie"
                 value: "shop_session-id=x-readiness-probe"
           livenessProbe:
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             httpGet:
               path: "/_healthz"
               port: 8080
@@ -99,11 +99,11 @@ spec:
           #   value: "true"
           resources:
             requests:
-              cpu: 100m
-              memory: 64Mi
+              cpu: 300m
+              memory: 192Mi
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 300m
+              memory: 384Mi
 ---
 apiVersion: v1
 kind: Service

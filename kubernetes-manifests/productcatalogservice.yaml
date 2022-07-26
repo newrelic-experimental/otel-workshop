@@ -31,7 +31,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: productcatalogservice
+        image: gcr.io/nr-devadv-labs/productcatalogservice:e0e021f
         ports:
         - containerPort: 3550
         env:

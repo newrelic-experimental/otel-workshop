@@ -31,7 +31,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: recommendationservice
+        image: gcr.io/nr-devadv-labs/recommendationservice:e0e021f
         ports:
         - containerPort: 8080
         readinessProbe:

@@ -1,33 +1,14 @@
 ---
 receivers:
-  hostmetrics:
-    collection_interval: 20s
-    scrapers:
-      cpu:
-        metrics:
-          system.cpu.utilization:
-            enabled: true
-      load:
-      memory:
-        metrics:
-          system.memory.utilization:
-            enabled: true
-      disk:
-      filesystem:
-        metrics:
-          system.filesystem.utilization:
-            enabled: true
-      network:
-      paging:
-        metrics:
-          system.paging.utilization:
-            enabled: true
-      processes:
+  # FOK Workshop - Receivers - hostmetrics
+
   otlp:
     protocols:
       grpc:
 
 processors:
+  # FOK Workshop - Processors - tail based sampling
+
   batch:
   cumulativetodelta:
     metrics:
@@ -71,10 +52,12 @@ exporters:
 
 service:
   pipelines:
+    # FOK Workshop - Receivers - hostmetrics
     metrics:
-      receivers: [ hostmetrics, otlp ]
+      receivers: [ otlp ]
       processors: [ resourcedetection, k8sattributes, resource, cumulativetodelta, batch ]
       exporters: [ otlp ]
+    # FOK Workshop - Processors - tail based sampling
     traces:
       receivers: [ otlp ]
       processors: [ resourcedetection, k8sattributes, resource, batch ]
