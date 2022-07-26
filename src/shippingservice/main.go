@@ -35,7 +35,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	// FOK Workshop - Span Attributes
-
+	"go.opentelemetry.io/otel/attribute"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -170,7 +170,7 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 	defer log.Info("[GetQuote] completed request")
 
 	// FOK Workshop - Building Spans
-	quote := CreateQuoteFromCount(0)
+	quote := CreateQuoteFromCount(0, ctx)
 
 	// Generate a response.
 	return &pb.GetQuoteResponse{
@@ -187,7 +187,8 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 func (s *server) ShipOrder(ctx context.Context, in *pb.ShipOrderRequest) (*pb.ShipOrderResponse, error) {
 	
 	// FOK Workshop - Span Attributes
-
+	ctx, parentSpan := tracer.Start(ctx, "shipOrder")
+	defer parentSpan.End()
 
 	log.Info("[ShipOrder] received request")
 	defer log.Info("[ShipOrder] completed request")
@@ -196,10 +197,15 @@ func (s *server) ShipOrder(ctx context.Context, in *pb.ShipOrderRequest) (*pb.Sh
 	baseAddress := fmt.Sprintf("%s, %s, %s, %d", in.Address.StreetAddress, in.Address.City, in.Address.State, in.Address.ZipCode)
 	
 	// FOK Workshop - Span Attributes
-
+	parentSpan.SetAttributes(
+		attribute.String("address", baseAddress), 
+		attribute.String("city", in.Address.City), 
+		attribute.String("state", in.Address.State))
 	
 	// FOK Workshop - Adding Errors
-
+	if in.Address.ZipCode < 10000 || in.Address.ZipCode > 99999 {
+		parentSpan.SetStatus(1, "zipcode is invalid")
+	}
 
 	id := CreateTrackingId(baseAddress)
 
@@ -216,26 +222,29 @@ func (q Quote) String() string {
 
 // CreateQuoteFromCount takes a number of items and returns a Price struct.
 // FOK Workshop - Building spans
-func CreateQuoteFromCount(count int) Quote {
+func CreateQuoteFromCount(count int, ctx context.Context) Quote {
 
 	// FOK Workshop - Building Spans
-
+	ctx, childSpan := tracer.Start(ctx, "CreateQuoteFromCount")
+	defer childSpan.End()
 
 	// FOK Workshop - Adding a Delay
+	time.Sleep(time.Second / 10)
 
 	// FOK Workshop - Building Spans
-	return CreateQuoteFromFloat(float64(rand.Intn(100)))
+	return CreateQuoteFromFloat(float64(rand.Intn(100)), ctx)
 }
 
 // CreateQuoteFromFloat takes a price represented as a float and creates a Price struct.
 // FOK Workshop - Building Spans
-func CreateQuoteFromFloat(value float64) Quote {
+func CreateQuoteFromFloat(value float64, ctx context.Context) Quote {
 	
 	// FOK Workshop - Building Spans
-
+	ctx, childSpan := tracer.Start(ctx, "CreateQuoteFromFloat")
+	defer childSpan.End()
 
 	// FOK Workshop - Adding a Delay
-
+	time.Sleep(time.Second / 3)
 
 	units, fraction := math.Modf(value)
 	return Quote{
