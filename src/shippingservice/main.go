@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,11 +17,11 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math"
+	"math/rand"
 	"net"
 	"os"
 	"time"
-	"math"
-	"math/rand"
 
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
@@ -33,6 +33,8 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 	"go.opentelemetry.io/otel/trace"
+
+	// FOK Workshop - Span Attributes
 
 
 	"golang.org/x/net/context"
@@ -166,9 +168,10 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 	log.Info("[GetQuote] received request")
 	defer log.Info("[GetQuote] completed request")
 
-	// 1. Generate a quote based on the total number of items to be shipped.
+	// FOK Workshop - Building Spans
 	quote := CreateQuoteFromCount(0)
-	// 2. Generate a response.
+
+	// Generate a response.
 	return &pb.GetQuoteResponse{
 		CostUsd: &pb.Money{
 			CurrencyCode: "USD",
@@ -181,11 +184,24 @@ func (s *server) GetQuote(ctx context.Context, in *pb.GetQuoteRequest) (*pb.GetQ
 // ShipOrder mocks that the requested items will be shipped.
 // It supplies a tracking ID for notional lookup of shipment delivery status.
 func (s *server) ShipOrder(ctx context.Context, in *pb.ShipOrderRequest) (*pb.ShipOrderResponse, error) {
+	
+	// FOK Workshop - Span Attributes
+
+
 	log.Info("[ShipOrder] received request")
 	defer log.Info("[ShipOrder] completed request")
+	
 	// 1. Create a Tracking ID
 	baseAddress := fmt.Sprintf("%s, %s, %s, %d", in.Address.StreetAddress, in.Address.City, in.Address.State, in.Address.ZipCode)
+	
+	// FOK Workshop - Span Attributes
+
+	
+	// FOK Workshop - Adding Errors
+
+
 	id := CreateTrackingId(baseAddress)
+
 	// 2. Generate a response.
 	return &pb.ShipOrderResponse{
 		TrackingId: id,
@@ -198,12 +214,28 @@ func (q Quote) String() string {
 }
 
 // CreateQuoteFromCount takes a number of items and returns a Price struct.
+// FOK Workshop - Building spans
 func CreateQuoteFromCount(count int) Quote {
+
+	// FOK Workshop - Building Spans
+
+
+	// FOK Workshop - Adding a Delay
+
+	// FOK Workshop - Building Spans
 	return CreateQuoteFromFloat(float64(rand.Intn(100)))
 }
 
 // CreateQuoteFromFloat takes a price represented as a float and creates a Price struct.
+// FOK Workshop - Building Spans
 func CreateQuoteFromFloat(value float64) Quote {
+	
+	// FOK Workshop - Building Spans
+
+
+	// FOK Workshop - Adding a Delay
+
+
 	units, fraction := math.Modf(value)
 	return Quote{
 		uint32(units),
