@@ -59,7 +59,7 @@ httplib2==0.20.4
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-idna==3.3
+idna==3.7
     # via requests
 opencensus==0.9.0
     # via
