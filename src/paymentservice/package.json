@@ -15,7 +15,7 @@
     "@google-cloud/profiler": "4.1.7",
     "@google-cloud/trace-agent": "5.1.6",
     "@grpc/grpc-js": "1.4.4",
-    "@grpc/proto-loader": "0.5.6",
+    "@grpc/proto-loader": "^0.7.15",
     "@opentelemetry/api": "^1.0.3",
     "@opentelemetry/exporter-collector-grpc": "^0.25.0",
     "@opentelemetry/exporter-zipkin": "^1.0.1",
@@ -28,6 +28,9 @@
     "pino": "5.17.0",
     "simple-card-validator": "^1.1.0",
     "uuid": "^3.2.1"
+  },
+  "overrides": {
+    "protobufjs": "7.5.5"
   },
   "devDependencies": {
     "semistandard": "16.0.1"
